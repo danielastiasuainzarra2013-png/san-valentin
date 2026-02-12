@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>¿Quieres ser mi San Valentín?</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; text-align: center; background-color: #ffe6e6; padding-top: 50px; }
+        h1 { color: #d00000; }
+        .botones { margin-top: 30px; }
+        button { padding: 15px 25px; font-size: 18px; cursor: pointer; border: none; border-radius: 10px; margin: 10px; }
+        #si { background-color: #ff4d4d; color: white; }
+        #no { background-color: #ccc; }
+    </style>
+</head>
+<body>
+
+    <h1>¿Quieres ser mi San Valentín? ❤️</h1>
+    
+    <div class="botones">
+        <button id="si" onclick="preguntarPassword()">¡SÍ!</button>
+        <button id="no" onmouseover="moverBoton(this)">No</button>
+    </div>
+
+    <script>
+        // Truco: El botón "No" se mueve cuando intentan tocarlo
+        function moverBoton(btn) {
+            btn.style.position = 'absolute';
+            btn.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+            btn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+        }
+
+        function preguntarPassword() {
+            const passCorrecta = "Te quiero"; // <--- CAMBIA TU CONTRASEÑA AQUÍ
+            let passUser = prompt("¡Sabía que dirías que sí! 😍 Ahora introduce la contraseña secreta:");
+
+            if (passUser === passCorrecta) {
+                alert("¡Contraseña correcta! Te llevo a tu sorpresa...");
+                window.location.href = "m.html"; // <--- NOMBRE DE TU OTRA PÁGINA
+            } else {
+                alert("Contraseña incorrecta... Inténtalo de nuevo, amor.");
+            }
+        }
+    </script>
+</body>
+</html>

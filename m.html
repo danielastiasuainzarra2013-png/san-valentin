@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Feliz San Valentín Jaisehell</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0; padding: 0; overflow: hidden; height: 100vh;
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 50%, #f48fb1 100%);
+            font-family: 'Montserrat', sans-serif;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        h1 {
+            position: absolute; top: 20px; width: 100%; text-align: center;
+            font-family: 'Dancing Script', cursive; font-size: 3.5rem;
+            color: #ad1457; text-shadow: 1px 1px 3px rgba(255,255,255,0.5);
+            z-index: 100;
+        }
+
+        /* Botón de Música Estilo San Valentín */
+        #music-btn {
+            position: absolute; bottom: 20px; left: 20px;
+            background: white; border: none; padding: 10px 15px;
+            border-radius: 50px; cursor: pointer; font-size: 0.8rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); color: #ad1457;
+            z-index: 200; display: flex; align-items: center; gap: 8px;
+        }
+
+        #canvas-container {
+            position: relative; width: 100vw; height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            transition: transform 2s ease-in-out;
+        }
+
+        svg { width: 90vw; height: 90vh; z-index: 10; overflow: visible; }
+
+        /* Carta de San Valentín */
+        #message-card {
+            position: absolute; right: -600px; top: 50%;
+            transform: translateY(-50%); background: white;
+            padding: 30px; border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(173, 20, 87, 0.15);
+            text-align: center; width: 320px; transition: all 1.5s ease-in-out;
+            z-index: 150; border: 2px solid #f8bbd0;
+        }
+
+        #message-card h2 {
+            font-family: 'Dancing Script', cursive; color: #880e4f;
+            font-size: 2.2rem; margin-bottom: 10px;
+        }
+
+        #message-card p {
+            font-size: 0.9rem; color: #6d4c41; line-height: 1.6;
+            margin: 0; font-style: italic;
+        }
+
+        .show-message #canvas-container { transform: translateX(-22%); }
+        .show-message #message-card { right: 10%; }
+
+        /* Corazones Mate con toque de borde */
+        .heart {
+            fill: #ff5c8d; stroke: #fff; stroke-width: 0.8px;
+            animation: pop 0.8s ease-out forwards;
+            cursor: pointer; transition: transform 0.3s;
+        }
+        .heart:hover { fill: #c2185b; transform: scale(1.5) !important; }
+
+        @keyframes pop {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        .petal {
+            position: absolute; border-radius: 150% 0 150% 0;
+            opacity: 0.4; pointer-events: none; z-index: 1;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <h1>Para mi San Valentín, Jaisehell</h1>
+
+    <button id="music-btn" onclick="toggleMusic()">
+        <span>❤️</span> Reproducir nuestra música
+    </button>
+
+    <audio id="miMusica" loop>
+        <source src="Ojala Fondo Flamnco.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="canvas-container">
+        <svg id="tree-svg" viewBox="0 0 1000 1000"></svg>
+    </div>
+
+    <div id="message-card">
+        <h2>Para mi persona favorita...</h2>
+        <p>Nuestro amor quiero que durare siempre. Prometo quedarme en las buenas en las malas auque avezces me pongo a jugar o salgo pero siempre estoy por ti, Te quiero mucho vida 💘</p>
+    </div>
+
+    <script>
+        const svg = document.getElementById('tree-svg');
+        const audio = document.getElementById('miMusica');
+
+        function toggleMusic() {
+            if (audio.paused) { audio.play(); document.getElementById('music-btn').innerHTML = "<span>⏸️</span> Pausar música"; }
+            else { audio.pause(); document.getElementById('music-btn').innerHTML = "<span>❤️</span> Reproducir música"; }
+        }
+
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            const size = Math.random() * 8 + 4 + 'px';
+            petal.style.width = size; petal.style.height = size;
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.top = '-20px';
+            petal.style.animationDuration = Math.random() * 4 + 6 + 's';
+            petal.style.backgroundColor = Math.random() > 0.5 ? '#fff' : '#f8bbd0';
+            document.body.appendChild(petal);
+            setTimeout(() => petal.remove(), 10000);
+        }
+        setInterval(createPetal, 400);
+
+        function createHeart(x, y) {
+            const heart = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            const d = `M ${x} ${y} c -5 -5, -12 -5, -12 2 c 0 7, 12 15, 12 15 s 12 -8, 12 -15 c 0 -7, -7 -7, -12 -2`;
+            heart.setAttribute("d", d);
+            heart.setAttribute("class", "heart");
+            heart.style.transformOrigin = `${x}px ${y}px`;
+            // Pequeño truco: si hace clic en el corazón, vibra
+            heart.onclick = () => { heart.style.fill = "#ad1457"; };
+            svg.appendChild(heart);
+        }
+
+        function drawBranch(x, y, len, angle, width) {
+            if (len < 12) {
+                createHeart(x, y);
+                return;
+            }
+            const x2 = x + Math.sin(angle * Math.PI / 180) * len;
+            const y2 = y - Math.cos(angle * Math.PI / 180) * len;
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line.setAttribute("x1", x); line.setAttribute("y1", y);
+            line.setAttribute("x2", x2); line.setAttribute("y2", y2);
+            line.setAttribute("stroke", "#4e342e");
+            line.setAttribute("stroke-width", width);
+            line.setAttribute("stroke-linecap", "round");
+            svg.appendChild(line);
+
+            setTimeout(() => {
+                drawBranch(x2, y2, len * 0.78, angle + 24, width * 0.7);
+                drawBranch(x2, y2, len * 0.78, angle - 24, width * 0.7);
+            }, 200);
+        }
+
+        window.onload = () => {
+            drawBranch(500, 950, 180, 0, 16);
+            setTimeout(() => { document.body.classList.add('show-message'); }, 7000);
+        };
+    </script>
+</body>
+</html>
